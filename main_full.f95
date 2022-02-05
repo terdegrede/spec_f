@@ -59,17 +59,16 @@ use utils
 				call random_number(r_v)
 				tmp = floor(r_v*2)
 
-				!print*, tmp
-				!print*, off
-				do l = 1, N
-					call random_number(r_n)
+				call random_number(r_n)
+				off(l) = (tmp(l)*al(l)+ (1 - tmp(l))*bt(l) - merge(1, 0, r_n < mu))**2 
+				! do l = 1, N
+				! 	call random_number(r_n)
 					
-					! off(l) = (tmp(l)*al(l)+ (1 - tmp(l))*bt(l) - merge(1, 0, r_n < mu))**2 
-					off(l) = tmp(l)*al(l)+ (1 - tmp(l))*bt(l)
-					if (r_n < mu)	off(l) = 1 - off(l)
+				! 	! off(l) = (tmp(l)*al(l)+ (1 - tmp(l))*bt(l) - merge(1, 0, r_n < mu))**2 
+				! 	off(l) = tmp(l)*al(l)+ (1 - tmp(l))*bt(l)
+				! 	if (r_n < mu)	off(l) = 1 - off(l)
 
-				end do 
-				!print*, off
+				! end do 
 
 			end if 
 			! Fills new population

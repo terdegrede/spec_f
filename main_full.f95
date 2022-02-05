@@ -6,14 +6,17 @@ use utils
 	! ****************************************
 	! 				Parameters
 	! ****************************************	
-	integer:: ix_al, k, l, r, j = 0, G = 50, T = 500, B = 1000
+	integer:: ix_al, ix_bt, k, l, q, r, t, j = 0, G = 50, tf = 500, B = 1000
 	integer, parameter:: M = 100, N = 1000		! Population matrix size
-	integer, dimension(M, N):: P, Pn, Pb, H			! Allocation(?)
+	integer, dimension(M, N):: P, Pn, Pb	! Allocation(?)
 	integer, dimension(N):: al, bt, tmp, off	! Individuals
+	integer, dimension(M, M):: H 				! Hamming distances matrix
+	integer, allocatable:: C(:)					! Index of compatible individuals
+	allocate(C(0))
 
-	real:: r_n, mu = 0.001 						! Random number, mutation rate
+	real:: r_n, mu = 0.1 						! Random number, mutation rate
 	real, dimension(N):: r_v					! Random vector
-	real, dimension(M, N):: test_val			! 
+	real, dimension(M, N):: test_val			! Random matrix
 
 	! Creates Population matrix for testing	
 	call random_number(test_val)
@@ -25,46 +28,60 @@ use utils
 	! ****************************************
 	open(1, file = "pop.dat") ! Opens .dat file 
 
-	do t = 0, T
+	do t = 0, tf
 
-		Pb = P(:, 1:B)
+		Pb = P(:, 1:B)				! Matrix of mating segments
+		Hb = hamming_tr(Pb, M, B)   ! H. distances between mating segments
+
 		do while (j <= M)
-			! Random index
+
+			! Random index for 1st individual
 			call random_number(r_n)
 			ix_al = 1+ floor((M+ 1)*r_n)
 
 			! 1st individual
 			al = P(ix_al, :)
 			
-			do k = 1, M
-				
-				if (sum(abs(Pb(ix_al, :) - Pb(k, :))) <= G) then
+			! Creates list of compatible individuals ----------
+			do q = 1, M
+				if(Hb(ix_al, q) <= G)	C = [C, q]
+			end do 
+			! -------------------------------------------------
+			
+			if (size(A) /= 0) then
+				call random_number(r_n)
+				ix_bt = C(1+ floor(r_n*size(C))) ! Random index for beta from the compatible individuals list
+
+				! 2nd individual
+				bt = P(ix_bt, :)
+
+				! Offspring + mutation
+				call random_number(r_v)
+				tmp = floor(r_v*2)
+
+				!print*, tmp
+				!print*, off
+				do l = 1, N
+					call random_number(r_n)
 					
-					! 2nd individual
-					bt = P(k, :)
-					
-					! Offspring + mutation
-					call random_number(r_v)
-					tmp = floor(r_v*2)
+					! off(l) = (tmp(l)*al(l)+ (1 - tmp(l))*bt(l) - merge(1, 0, r_n < mu))**2 
+					off(l) = tmp(l)*al(l)+ (1 - tmp(l))*bt(l)
+					if (r_n < mu)	off(l) = 1 - off(l)
 
-					do l = 1, N
-						call random_number(r_n)
-						
-						off(l) = (tmp(l)*al(l)+ (1 - tmp(l))*bt(l) - merge(1, 0, r_n < mu))**2 
+				end do 
+				!print*, off
 
-					end do 
-
-					! Fills new population
-					Pn(j, :) = off
-					j = j + 1
-				end if 
-			end do
-			print*, j 
+			end if 
+			! Fills new population
+			Pn(j, :) = off
+			j = j + 1
+			
+			! print*, j 
 
 		end do ! End while
 		P = Pn
-		
-		!print*, t, "out of ", 500
+	
+	print*, t, "Out of ", tf
 	end do
 
 	! H = hamming_tr(P, M, N)

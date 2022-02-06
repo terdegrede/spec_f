@@ -14,7 +14,7 @@ use utils
 	integer, dimension(M, B):: Pb
 	integer, allocatable:: C(:)					! Index of compatible individuals
 
-	real:: r_n, mu = 0.001 						! Random number, mutation rate
+	real:: r_n, mu = 0.0025 						! Random number, mutation rate
 	real, dimension(N):: r_v					! Random vector
 	real, dimension(M, N):: test_val			! Random matrix
 

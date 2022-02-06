@@ -18,9 +18,6 @@ use utils
 	real, dimension(N):: r_v					! Random vector
 	real, dimension(M, N):: test_val			! Random matrix
 
-	!	allocate(C(0))
-
-
 	! Creates Population matrix for testing	
 	! call random_number(test_val)
 	! P = nint(test_val)
@@ -30,7 +27,7 @@ use utils
 	!              Main Loop
 	! ****************************************
 	open(11, file = "pop.dat") ! Opens .dat file 
-	!open(12, file = "hamm.dat")	! TEST FILE
+	open(12, file = "hamm.dat")	! TEST FILE
 	do t = 1, tf
 		Pb = P(:, 1:B)				! Matrix of mating segments
 		Hb = hamming_tr(Pb, M, B)   ! H. distances between mating segments
@@ -79,7 +76,6 @@ use utils
 				 	
 				 end do 
 				
-				! print*, t, size(off)
 				! Fills new population
 				Pn(j, :) = off
 				j = j + 1
@@ -90,13 +86,15 @@ use utils
 		end do ! End while
 		P = Pn
 	
-	! print*, t, "Out of ", tf
+	print*, t, "Out of ", tf
 	end do ! End generations loop
 
-	!H = hamming_tr(P, M, N)
+	H = hamming_tr(P, M, N)
+
 	do r = 1, M
 		write(11, *) P(r, :)
-	!	write(12, *) H(r, :)
+		write(12, *) H(r, :)
+		
 	end do
 
 end program main_full

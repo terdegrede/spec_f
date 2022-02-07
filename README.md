@@ -16,5 +16,8 @@ Speciation scripts using fortran (and a little of Matlab)
 	./main_full.out
 	```
 
+## How to plot?
+Running 'main.f95' or 'main_full.f95' creates files 'pop.dat' (last population matrix) and 'vmat.dat' (mating segment length), both readable by matlab. Run 'grph_fortran.m' in MATLAB to get the graphs.
+
 
 

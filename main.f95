@@ -1,24 +1,25 @@
 program main
 use utils
-	implicit none
+implicit none
 
 	! *************************************************************************************
 	! 							Declaration of variables
 	! *************************************************************************************	
 	integer:: ix_al, ix_bt								! Indexes to choose individuals
 	integer:: l, q, r, t, j = 1							! Loop indexes
-	integer:: G = 50, tf = 500 							! Fixed parameters
-	integer, parameter:: M = 100, N = 1000, B = 1000	! Population/mating matrix size parameters
+	integer:: G = 200, tf = 2000 						! Fixed parameters
+	integer, parameter:: M = 500, N = 19000, B = 4000	! Population/mating matrix size parameters
 	integer, dimension(M, N):: P, Pn					! Population matrix declaration
 	integer, dimension(N):: al, bt, tmp, off			! Individuals, recombination and offspring
 	integer, dimension(M, M):: H, Hb 					! Hamming distances matrix
 	integer, dimension(M, B):: Pb						! Mating matrix
 	integer, allocatable:: C(:)							! List of compatible individuals indexes
 
-	real:: r_n, mu = 0.0025 						! Random number, mutation rate
+	real:: r_n, mu = 0.001 						! Random number, mutation rate
 	real, dimension(N):: r_v					! Random vector
 	real, dimension(M, N):: test_val			! Random matrix
 
+    
 	! Definition of initial Population
 	P = 0
 
@@ -78,15 +79,15 @@ use utils
 		
 		P = Pn 									! Redefining population for new generation
 	
-	if (mod(t, 50) == 0) print*, t, "Out of ", tf
+	! if (mod(t, 50) == 0) print*, t, "Out of ", tf
+	print*, t, "Out of ", tf
 	end do
 	
 
 	! Save last population
-	do r = 1, M
-		write(1, *) P(r, :)		
-	end do
-
+	
+	write(1, *) P
 	write(2, *) B
+	
 
 end program main

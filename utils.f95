@@ -39,6 +39,6 @@ module utils
 			
 				!print*, k, "out of ", M
 			end do
-			end function hamming
+		end function hamming
 
 end module utils

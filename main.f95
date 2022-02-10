@@ -7,8 +7,8 @@ implicit none
 	! *************************************************************************************	
 	integer:: ix_al, ix_bt								! Indexes to choose individuals
 	integer:: l, q, r, t, j = 1							! Loop indexes
-	integer:: G = 200, tf = 2000 						! Fixed parameters
-	integer, parameter:: M = 500, N = 19000, B = 4000	! Population/mating matrix size parameters
+	integer:: G, tf = 500 						! Fixed parameters
+	integer, parameter:: M = 500, N = 10000, B = 4000	! Population/mating matrix size parameters
 	integer, dimension(M, N):: P, Pn					! Population matrix declaration
 	integer, dimension(N):: al, bt, tmp, off			! Individuals, recombination and offspring
 	integer, dimension(M, M):: H, Hb 					! Hamming distances matrix
@@ -20,9 +20,10 @@ implicit none
 	real, dimension(M, N):: test_val			! Random matrix
 
     
-	! Definition of initial Population
+	! Initialization
 	P = 0
-
+	G = 0.05*B 									! Mating distance (dB)
+	print*, G
 	! Opens .dat file for population and B
 	open(1, file = "pop.dat") 
 	open(2, file = "vmat.dat") 
@@ -87,7 +88,7 @@ implicit none
 	! Save last population
 	
 	write(1, *) P
-	write(2, *) B
+	write(2, *) B, M, N
 	
 
 end program main

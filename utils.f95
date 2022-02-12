@@ -26,14 +26,10 @@ module utils
 			l_0 = 1
 			do k = 1, M       !rows
 				do l = l_0, M ! cols
-
 					! Hamming distances
-					hamming(k, l) = sum(abs(P(k, :) - P(l, :)))
+					hamming(k, l) = sum((P(k, :) - P(l, :))*(P(k, :) - P(l, :)))
 					hamming(l, k) = hamming(k, l) ! Full matrix (not only triangular)
-
-					if (k == l) then
-						hamming(k, l) = N + 1
-					end if
+					hamming(k, k) = N + 1
 				end do 
 				l_0 = l_0 + 1
 			
